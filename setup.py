@@ -3,7 +3,8 @@ from setuptools import setup, find_packages
 setup(
     name='arcade-tools',
     version='0.1.0',
-    packages=find_packages(),
+    packages=["arcade-tools"],
+    package_dir={"": "src"},
     install_requires=[
         'pygame==2.6.1'
     ],
