@@ -1,2 +1,5 @@
 .idea/
 __pycache__/
+build/
+dist/
+src/arcade_tools.egg-info/

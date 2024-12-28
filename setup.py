@@ -1,9 +1,9 @@
-from setuptools import setup, find_packages
+from setuptools import setup
 
 setup(
     name='arcade-tools',
     version='0.1.0',
-    packages=["arcade-tools"],
+    packages=["arcade_tools"],
     package_dir={"": "src"},
     install_requires=[
         'pygame==2.6.1'
