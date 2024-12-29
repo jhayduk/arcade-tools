@@ -48,7 +48,7 @@ Changes for an upcoming release are gathered in the `develop` branch. To create 
     ```
 2. Update CHANGELOG.md file. Commit and push.
 3. Update `version` in `setup()` call in setup.py file. Commit and push.
-4. Place tag and push.
+4. Place tag and push. Tags have the format `v0.1.1`, including the leading "v".
     ```commandline
     git tag -a tagName -m "message"
     git push origin tagName
