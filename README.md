@@ -53,9 +53,9 @@ Changes for an upcoming release are gathered in the `develop` branch. To create 
     git tag -a tagName -m "message"
     git push origin tagName
     ```
-5. Merge `dev` branch **into** `main` branch.
+5. Merge _tagName_ branch **into** `main` branch.
     ```commandline
     git switch main
     git pull
-    git merge dev
+    git merge tagName
     ```
