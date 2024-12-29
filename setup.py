@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='arcade-tools',
-    version='0.1.0',
+    version='0.1.1',
     packages=["arcade_tools"],
     package_dir={"": "src"},
     install_requires=[
