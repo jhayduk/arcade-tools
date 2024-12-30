@@ -2,7 +2,7 @@ import pygame
 from pygame import Surface
 from pygame.event import Event
 from pygame.math import Vector2
-from typing import Union
+from typing import Optional, Union
 
 
 class GameElement(pygame.Rect):
@@ -12,21 +12,29 @@ class GameElement(pygame.Rect):
     that Rect objects have). It also has an image (instantiated with a filename),
     and a velocity in 2D space.
 
-    Public Methods (in addition to those inherited from Rect):
+    Public Methods (in addition to those inherited from pygame.Rect)
+    ----------------------------------------------------------------
+    update(dt, events, screen)
+        Update the position of the GameElement based on its velocity and the time delta.
 
-        update(dt, events, screen)
-        collided_with(other_element)
-        draw(screen)
+    collided_with(other_element)
+        Handle behavior when this element collides with another.
 
-    Public Instance Variables (in addition to those inherited from Rect):
+    draw(screen)
+        Draw this object's image on the given screen surface at its current position.
 
-        velocity - The current velocity of this element on the screen in pixels
-                    per millisecond. The positive direction of a velocity
-                    vector is to the right and down (↘).
+    Public Instance Variables (in addition to those inherited from pygame.Rect)
+    ---------------------------------------------------------------------------
+    velocity : Vector2
+        The current velocity of this element on the screen in pixels per millisecond. The positive
+        direction of a velocity vector is to the right and down (↘).
 
-        collidable - True if this element can be collided with and, therefore,
-                        should participate in collision detection calculations.
+    collidable : bool
+        True if this element can be collided with and should participate in collision detection
+        calculations.
 
+    Notes
+    -----
     The x and y positions are always defined in pixels and refer to the top left
     corner of the image. The x and y values are always relative to the top left
     corner of the game screen itself, which is defined to be at x=0, y=0.
@@ -79,14 +87,12 @@ class GameElement(pygame.Rect):
 
         TODO: Add support for cropping a single image out of a sprite sheet.
         """
-        #
-        # Make sure pygame is initialized. Normally, this is expected to be
-        # done before elements are created, so issue a warning if it had to
-        # be done here.
-        #
+        # Make sure pygame is initialized.
         if not pygame.get_init():
-            print(f"WARNING: pygame was not initialized when a {self.__class__.__name__} object was instantiated. It has now been initialized, but pygame.init() should normally be called before instantiating any instances of the {self.__class__.__name__} class.")
-            pygame.init()
+            raise RuntimeError(
+                f"Pygame must be initialized before creating a {self.__class__.__name__} object. "
+                f"Please call pygame.init() before using this class."
+            )
 
         # Load the image if a file path is provided, otherwise use the provided surface
         if isinstance(image, str):
@@ -105,7 +111,7 @@ class GameElement(pygame.Rect):
         self.velocity = velocity
         self.collidable = collidable
 
-    def update(self, dt: int, events: list[Event] = None, screen: Surface = None, **kwargs):
+    def update(self, dt: int, events: Optional[list[Event]] = None, screen: Optional[Surface] = None, **kwargs):
         """
         Update the position of the GameElement based on its velocity and the time delta.
 
