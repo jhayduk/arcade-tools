@@ -1,8 +1,5 @@
 import pygame
-from pygame import Surface
-from pygame.event import Event
-from pygame.math import Vector2
-from typing import Optional, Union
+import typing
 
 
 class GameElement(pygame.Rect):
@@ -25,7 +22,7 @@ class GameElement(pygame.Rect):
 
     Public Instance Variables (in addition to those inherited from pygame.Rect)
     ---------------------------------------------------------------------------
-    velocity : Vector2
+    velocity : pygame.math.Vector2
         The current velocity of this element on the screen in pixels per millisecond. The positive
         direction of a velocity vector is to the right and down (↘).
 
@@ -39,8 +36,8 @@ class GameElement(pygame.Rect):
     corner of the image. The x and y values are always relative to the top left
     corner of the game screen itself, which is defined to be at x=0, y=0.
 
-    The velocity is a Vector2 value in pixels per millisecond (ppm), with a unit
-    vector pointing 1 ppm to the right and 1 ppm down (↘).
+    The velocity is a pygame.math.Vector2 value in pixels per millisecond (ppm),
+    with a unit vector pointing 1 ppm to the right and 1 ppm down (↘).
 
     The image file is expected to contain a single loadable image that can be
     drawn on the pygame screen. A single image can be selected from a sprite sheet
@@ -58,10 +55,10 @@ class GameElement(pygame.Rect):
     but this class' version can be used for simple elements.
     """
     def __init__(self,
-                 image: Union[str, Surface],
+                 image: typing.Union[str, pygame.Surface],
                  x: int = 0,
                  y: int = 0,
-                 velocity: Vector2 = Vector2(0, 0),
+                 velocity: pygame.math.Vector2 = pygame.math.Vector2(0, 0),
                  collidable: bool = True):
         """
         :param image: The name of the file, including the relative path
@@ -97,7 +94,7 @@ class GameElement(pygame.Rect):
         # Load the image if a file path is provided, otherwise use the provided surface
         if isinstance(image, str):
             self.image = pygame.image.load(image).convert_alpha()
-        elif isinstance(image, Surface):
+        elif isinstance(image, pygame.Surface):
             self.image = image
         else:
             raise ValueError("The image parameter must be either a file path or a pygame.Surface object.")
@@ -111,7 +108,7 @@ class GameElement(pygame.Rect):
         self.velocity = velocity
         self.collidable = collidable
 
-    def update(self, dt: int, events: Optional[list[Event]] = None, screen: Optional[Surface] = None, **kwargs):
+    def update(self, dt: int, events: typing.Optional[list[pygame.event.Event]] = None, screen: typing.Optional[pygame.Surface] = None, **kwargs):
         """
         Update the position of the GameElement based on its velocity and the time delta.
 
@@ -157,7 +154,7 @@ class GameElement(pygame.Rect):
         # TODO: Provide some generic reaction to collisions
         pass
 
-    def draw(self, screen: Surface):
+    def draw(self, screen: pygame.Surface):
         """
         Draw this object's image on the given screen surface at its current position.
 
