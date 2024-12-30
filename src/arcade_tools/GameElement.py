@@ -2,33 +2,41 @@ import pygame
 import typing
 
 
-class GameElement(pygame.Rect):
+class GameElement:
     """
-    A GameElement is an updatable and drawable entity. It is a subclass of Rect,
-    so it has x and y positions (as well as the topleft, bottom, etc. variables
-    that Rect objects have). It also has an image (instantiated with a filename),
-    and a velocity in 2D space.
+    A GameElement is an updatable and drawable entity. It has a pygame.Rect
+    attribute called rect that  has x and y positions (as well as the topleft,
+    bottom, etc. variables that Rect objects have). It also has an image
+    (instantiated with a filename), and a velocity in 2D space.
 
-    Public Methods (in addition to those inherited from pygame.Rect)
-    ----------------------------------------------------------------
+    Public Methods
+    --------------
     update(dt, events, screen)
-        Update the position of the GameElement based on its velocity and the time delta.
+        Update the position of the GameElement based on its velocity and the
+        time delta.
 
     collided_with(other_element)
         Handle behavior when this element collides with another.
 
     draw(screen)
-        Draw this object's image on the given screen surface at its current position.
+        Draw this object's image on the given screen surface at its current
+        position.
 
-    Public Instance Variables (in addition to those inherited from pygame.Rect)
-    ---------------------------------------------------------------------------
-    velocity : pygame.math.Vector2
-        The current velocity of this element on the screen in pixels per millisecond. The positive
-        direction of a velocity vector is to the right and down (↘).
-
+    Public Instance Variables
+    -------------------------
     collidable : bool
-        True if this element can be collided with and should participate in collision detection
-        calculations.
+        True if this element can be collided with and should participate in
+        collision detection calculations.
+
+    rect : pygame.Rect
+        The rectangular area that defines the position and size of the
+        GameElement. This can be used to query and set attributes like
+        rect.center.
+
+    velocity : pygame.math.Vector2
+        The current velocity of this element on the screen in pixels per
+        millisecond. The positive direction of a velocity vector is to the
+        right and down (↘).
 
     Notes
     -----
@@ -99,10 +107,8 @@ class GameElement(pygame.Rect):
         else:
             raise ValueError("The image parameter must be either a file path or a pygame.Surface object.")
 
-        image_rect = self.image.get_rect()
-
-        # Initialize the Rect with the size of the image
-        super().__init__(x, y, image_rect.width, image_rect.height)
+        # Create the rect attribute
+        self.rect = self.image.get_rect(topleft=(x, y))
 
         # Initialize other passed in settings
         self.velocity = velocity
@@ -132,21 +138,19 @@ class GameElement(pygame.Rect):
                         MUST be taken into account if it is used.
 
         """
-        self.move_ip(self.velocity.x * dt, self.velocity.y * dt)
+        self.rect.move_ip(self.velocity.x * dt, self.velocity.y * dt)
 
     def collided_with(self, other_element: 'GameElement'):
         """
-        When two objects collide with each other, they both can be affected.
-
-        This method should be called whenever collisions occur.
-
-        The "other_element" is what collided with the self instance.
+        React to a collision with the specified "other_element".
 
         Override this method if the self object should be affected by
         collisions and use it to update the self instance only. Do not update
         the "other_instance". If the "other_instance" is also affected by the
         collision, its collided_with() method is the one that is responsible
         for updating that object.
+
+        This method should be called whenever collisions occur.
 
         :param other_element: The GameElement object that collided with this
                                 GameElement.
@@ -165,4 +169,4 @@ class GameElement(pygame.Rect):
             The element's position is always relative to the top-left corner
             of the screen.
         """
-        screen.blit(self.image, self.topleft)
+        screen.blit(self.image, self.rect.topleft)
