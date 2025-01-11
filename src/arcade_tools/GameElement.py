@@ -5,7 +5,7 @@ import typing
 class GameElement:
     """
     A GameElement is an updatable and drawable entity. It has a pygame.Rect
-    attribute called rect that  has x and y positions (as well as the topleft,
+    attribute called rect that has x and y positions (as well as the topleft,
     bottom, etc. variables that Rect objects have). It also has an image
     (instantiated with a filename), and a velocity in 2D space.
 
@@ -66,7 +66,7 @@ class GameElement:
                  image: typing.Union[str, pygame.Surface],
                  x: int = 0,
                  y: int = 0,
-                 velocity: pygame.math.Vector2 = pygame.math.Vector2(0, 0),
+                 velocity: pygame.math.Vector2 = None,
                  collidable: bool = True):
         """
         :param image: The name of the file, including the relative path
@@ -83,7 +83,8 @@ class GameElement:
                     top left of the screen, of the element.
         :param velocity: The initial velocity, in pixels per millisecond,
                     of the element. The unit vector points to the right and
-                    down.
+                    down. If no value is provided, velocity of (0, 0) will be
+                    assigned.
         :param collidable: If True (the default) the element can be collided
                             with and should participate in collision detection
                             calculations. Set this to False for background
@@ -111,7 +112,10 @@ class GameElement:
         self.rect = self.image.get_rect(topleft=(x, y))
 
         # Initialize other passed in settings
-        self.velocity = velocity
+        if velocity is None:
+            self.velocity = pygame.math.Vector2(0, 0)
+        else:
+            self.velocity = velocity
         self.collidable = collidable
 
     def update(self, dt: int, events: typing.Optional[list[pygame.event.Event]] = None, screen: typing.Optional[pygame.Surface] = None, **kwargs):
